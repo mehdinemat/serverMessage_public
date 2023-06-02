@@ -3,6 +3,8 @@ const Attacked = require('../models/attacked')
 const SimNumber = require('../models/simNumber')
 const Attacking = require('../models/attacking')
 
+const AttackGroup = require('../models/attackGroup')
+
 const attackCtrl = {
 
   addPerson: async (req, res) => {
@@ -59,6 +61,15 @@ const attackCtrl = {
 
     } catch (err) { return res.status(500).json({ msg: err.message }) }
 
+  },
+  getAttacked:async(req,res)=>{
+
+    try{
+
+      const attacked = await Attacked.find()
+      res.status(200).json({attacked})
+      
+    }catch(err){ return res.status(500).json({msg:err.message}) }
   },
   updateAttacked: async (req, res) => {
 
@@ -157,6 +168,50 @@ const attackCtrl = {
       res.status(200).json({attacking})
 
     } catch (err) { return res.status(500).json({ msg: err.message }) }
+
+  },
+  getAttacking:async(req,res)=>{
+
+    try{
+
+      const attacking = await Attacking.find()
+
+      res.status(200).json({attacking})
+
+    }catch(err){ return res.status(500).json({msg:err.message}) }
+
+  },
+  addAttackGroup:async(req,res)=>{
+
+    try{
+
+      const  { dateFrom , dateTo , hour , attacking , attacked , messageGroup } = req.body
+      
+      const attackGroup = new AttackGroup({dateFrom , dateTo , hour , attacking , attacked , messageGroup})
+      
+      await attackGroup.save()
+      
+    }catch(err){ return res.status(500).json({msg:err.message}) }
+
+  },updateAttackGroup:async(req,res)=>{
+    try{
+
+      const  { dateFrom , dateTo , hour , attacking , attacked , messageGroup , id } = req.body
+
+      const attackGroup = await AttackGroup.findByIdAndUpdate({_id:id} ,{dateFrom , dateTo , hour , attacking , attacked , messageGroup },{new:true})
+
+      return res.status(200).json({attackGroup})
+      
+    }catch(err){ return res.status(500).json({msg:err.message}) }
+  },deleteAttackGroup:async(req,res)=>{
+    try{
+      const {id} = req.params
+
+      const attackGroup = await AttackGroup.findByIdAndDelete({_id:id})
+
+      return res.status(200).json({attackGroup})
+
+    }catch(err){ return res.status(500).json({msg:err.message}) }
 
   }
 

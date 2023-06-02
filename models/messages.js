@@ -9,6 +9,6 @@ const messageSchema = new mongoose.Schema({
     type:mongoose.Types.ObjectId , ref:'proper'
   }
 
-})
+},{timestamps:true})
 
 module.exports = mongoose.model('messages' , messageSchema)
