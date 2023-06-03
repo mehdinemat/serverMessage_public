@@ -2,8 +2,11 @@ const Person = require('../models/person')
 const Attacked = require('../models/attacked')
 const SimNumber = require('../models/simNumber')
 const Attacking = require('../models/attacking')
-
 const AttackGroup = require('../models/attackGroup')
+const Number = require('../models/number')
+const OperatorName = require('../models/operatorName')
+const OwnerShip = require('../models/ownerShip')
+const Location = require('../models/location')
 
 const attackCtrl = {
 
@@ -62,14 +65,14 @@ const attackCtrl = {
     } catch (err) { return res.status(500).json({ msg: err.message }) }
 
   },
-  getAttacked:async(req,res)=>{
+  getAttacked: async (req, res) => {
 
-    try{
+    try {
 
       const attacked = await Attacked.find()
-      res.status(200).json({attacked})
-      
-    }catch(err){ return res.status(500).json({msg:err.message}) }
+      res.status(200).json({ attacked })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
   },
   updateAttacked: async (req, res) => {
 
@@ -134,7 +137,18 @@ const attackCtrl = {
       res.status(200).json({ simnumber })
 
     } catch (err) { return res.status(500).json({ msg: err.message }) }
-  }, addAttacking: async (req, res) => {
+  },
+  getSimNumber: async (req, res) => {
+
+    try {
+
+      const simNumber = await SimNumber.find()
+      res.status(200).json({ simNumber })
+
+    } catch (err) { return status(500).json({ msg: err.message }) }
+
+  },
+  addAttacking: async (req, res) => {
     try {
 
       const { name, sim } = req.body
@@ -150,9 +164,9 @@ const attackCtrl = {
 
     try {
 
-      const { id, name, simnumber } = req.body
+      const { _id, name, sim } = req.body
 
-      const attacking = await Attacking.findByIdAndUpdate({ _id: id }, { name, simnumber }, { new: true })
+      const attacking = await Attacking.findByIdAndUpdate({ _id }, { name, sim }, { new: true })
 
       res.status(200).json({ attacking })
 
@@ -165,54 +179,169 @@ const attackCtrl = {
 
       const { id } = req.params
       const attacking = await Attacking.findByIdAndDelete({ _id: id })
-      res.status(200).json({attacking})
+      res.status(200).json({ attacking })
 
     } catch (err) { return res.status(500).json({ msg: err.message }) }
 
   },
-  getAttacking:async(req,res)=>{
+  getAttacking: async (req, res) => {
 
-    try{
+    try {
 
       const attacking = await Attacking.find()
 
-      res.status(200).json({attacking})
+      res.status(200).json({ attacking })
 
-    }catch(err){ return res.status(500).json({msg:err.message}) }
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
 
   },
-  addAttackGroup:async(req,res)=>{
+  addAttackGroup: async (req, res) => {
 
-    try{
+    try {
 
-      const  { dateFrom , dateTo , hour , attacking , attacked , messageGroup } = req.body
-      
-      const attackGroup = new AttackGroup({dateFrom , dateTo , hour , attacking , attacked , messageGroup})
-      
+      const { dateFrom, dateTo, hour, attacking, attacked, messageGroup } = req.body
+
+      const attackGroup = new AttackGroup({ dateFrom, dateTo, hour, attacking, attacked, messageGroup })
+
       await attackGroup.save()
-      
-    }catch(err){ return res.status(500).json({msg:err.message}) }
 
-  },updateAttackGroup:async(req,res)=>{
-    try{
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
 
-      const  { dateFrom , dateTo , hour , attacking , attacked , messageGroup , id } = req.body
+  }, updateAttackGroup: async (req, res) => {
+    try {
 
-      const attackGroup = await AttackGroup.findByIdAndUpdate({_id:id} ,{dateFrom , dateTo , hour , attacking , attacked , messageGroup },{new:true})
+      const { dateFrom, dateTo, hour, attacking, attacked, messageGroup, id } = req.body
 
-      return res.status(200).json({attackGroup})
-      
-    }catch(err){ return res.status(500).json({msg:err.message}) }
-  },deleteAttackGroup:async(req,res)=>{
-    try{
-      const {id} = req.params
+      const attackGroup = await AttackGroup.findByIdAndUpdate({ _id: id }, { dateFrom, dateTo, hour, attacking, attacked, messageGroup }, { new: true })
 
-      const attackGroup = await AttackGroup.findByIdAndDelete({_id:id})
+      return res.status(200).json({ attackGroup })
 
-      return res.status(200).json({attackGroup})
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  }, deleteAttackGroup: async (req, res) => {
+    try {
+      const { id } = req.params
 
-    }catch(err){ return res.status(500).json({msg:err.message}) }
+      const attackGroup = await AttackGroup.findByIdAndDelete({ _id: id })
 
+      return res.status(200).json({ attackGroup })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+
+  },
+  addNumber: async (req, res) => {
+
+    try {
+
+      const { number } = req.body
+
+      const resNumber = new Number({ number })
+      await resNumber.save()
+
+      res.status(200).json({ number: resNumber })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+
+  }, getNumber: async (req, res) => {
+
+    try {
+
+      const number = await Number.find()
+
+      res.status(200).json({ number })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+
+  }, deleteNumber: async (req, res) => {
+
+    try {
+
+      const { id } = req.params
+
+      const number = await Number.findByIdAndDelete({ _id: id })
+
+      res.status(200).json({ number })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+
+  },
+  addOperatorName: async (req, res) => {
+    try {
+
+      const { name } = req.body
+
+      const operatorName = new OperatorName({ name })
+      await operatorName.save()
+      res.status(200).json({ operatorName })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  }, getOperatorName: async (req, res) => {
+    try {
+
+      const operatorName = await OperatorName.find()
+
+      res.status(200).json({ operatorName })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  },
+  deleteOperatorName: async (req, res) => {
+    try {
+
+      const { id } = req.params
+      const operatorName = await OperatorName.findByIdAndDelete({ _id: id })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  },
+  addOwnerShip: async (req, res) => {
+    try {
+
+      const { name } = req.body
+      const ownerShip = new OwnerShip({ name })
+      await ownerShip.save()
+      res.status(200).json({ ownerShip })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  },
+  getOwnerShip: async (req, res) => {
+    try {
+      const ownerShip = await OwnerShip.find()
+      res.status(200).json({ ownerShip })
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  },
+  deleteOwnerShip: async (req, res) => {
+    try {
+
+      const { id } = req.params
+      const ownerShip = await OwnerShip.findByIdAndDelete({ _id: id })
+      res.status(200).json({ ownerShip })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  },
+  addLocation: async (req, res) => {
+    try {
+
+      const { name } = req.body
+      const location = new Location({ name })
+      await location.save()
+      res.status(200).json({ location })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  },
+  getLocation: async (req, res) => {
+    try {
+
+      const location = await Location.find()
+      res.status(200).json({ location })
+
+    } catch (err) { return res.status(500).json({ msg: err.message }) }
+  },
+  deleteLocation: async (req, res) => {
+    try {
+
+      const { id } = req.params
+      const location = await Location.findByIdAndDelete({ _id: id })
+      res.status(200).json({ location })
+
+    } catch (res) { return res.status(500).json({ msg: res.message }) }
   }
 
 }

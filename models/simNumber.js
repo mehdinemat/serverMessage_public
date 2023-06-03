@@ -5,11 +5,11 @@ const simNumberSchema = new mongoose.Schema({
   number:{
     type:String , required:true
   },operatorname:{
-    type:String , required:true
+    type:mongoose.Types.ObjectId , ref:'operatorname'
   },ownership:{
-    type:String , required:true
+    type:mongoose.Types.ObjectId , ref:'ownership'
   },loc:{
-    type:String , required:true
+    type:mongoose.Types.ObjectId , ref:'location'
   }
 
 
